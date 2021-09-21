@@ -1,0 +1,154 @@
+#
+# The 'lux' test tool can be obtained from:
+#
+#   https://github.com/hawk/lux.git
+#
+[doc Check stages of Nano service]
+[global target_dir=../../../..]
+
+[shell ncs]
+    [timeout 20]
+    [progress NSO and netsim are running]
+    !ncs --status | grep --color=never "status"
+    ?status: started
+    ?SH-PROMPT:
+    !cd ${target_dir}
+    ?SH-PROMPT:
+    !ncs-netsim is-alive r0
+    ?DEVICE r0 OK
+    ?SH-PROMPT:
+
+[shell ncs-cli1]
+    [progress connect]
+    !ncs_cli -C -u admin
+    ?.*#
+
+    [progress turn off pagination]
+    !paginate false
+    ?.*#
+
+    [progress device is exist]
+    !show devices device r0 state
+    ?state oper-state    enabled
+    ?.*#
+
+    [progress device sync]
+    !devices device r0 check-sync
+    ?result in-sync
+    ?.*#
+
+    [progress check packages]
+    !packages reload
+    ?.*package cisco-ios-cli-3.8
+    ?.*result true
+    ?.*package example-nano-0.1.0
+    ?.*result true
+    ?.*#
+
+    [progress send test webex notification]
+    !nano sla webex send-test-msg
+    ?msg OK
+    ?.*#
+
+    [progress configure the service]
+    !config
+    ?.*#
+    !nano sla init-sla-policy
+    ?yes,no
+    !yes
+    ?result true
+    !nano nano 123 device r0
+    ?.*#
+    !commit
+    ???Commit complete.
+    ?.*#
+    !end
+    ?.*#
+    [sleep 5]
+    !show nano nano 123 plan component self
+    ???init   reached
+    ???ready  not-reached
+    ?.*#
+    [sleep 10]
+    !show nano nano 123 plan component cfg-com-type config | notab
+    ???state init
+    ???status reached
+    ???state approver-notif
+    ???status             reached
+    ???post-action-status create-reached
+    ???state approved
+    ???status not-reached
+    ???state pre-test
+    ???status not-reached
+    ???state banner-cfg
+    ???status not-reached
+    ???state name-server-cfg
+    ???status not-reached
+    ???state post-test
+    ???status not-reached
+    ???state ready
+    ???status not-reached
+    ???back-track false
+    ?.*#
+    !config
+    ?.*#
+    !nano nano 123 approved
+    ?.*#
+    !commit and-quit
+    ???Commit complete.
+    ?.*#
+    [sleep 10]
+    !show nano nano 123 plan component self
+    ???init   reached
+    ???ready  reached
+    ?.*#
+    !show nano nano 123 plan component cfg-com-type config | notab
+    ???state init
+    ???status reached
+    ???state approver-notif
+    ???status             reached
+    ???post-action-status create-reached
+    ???state approved
+    ???status reached
+    ???state pre-test
+    ???status             reached
+    ???post-action-status create-reached
+    ???state banner-cfg
+    ???status reached
+    ???state name-server-cfg
+    ???status reached
+    ???state post-test
+    ???status             reached
+    ???post-action-status create-reached
+    ???state ready
+    ???status reached
+    ???back-track false
+    ?.*#
+
+    [progress check banner is exist]
+    !show running-config devices device r0 config | nomore
+    ???banner motd "The message of the day"
+    ?.*#
+
+    [progress check spm]
+    !show nano nano 123 service-progress-monitoring | notab
+    ???policy           nano-sla-policy
+    ???jeopardy-result  passed
+    ???violation-result passed
+    ???status           successful
+    ?.*#
+
+    [progress remove sla and service]
+    !config
+    ?.*#
+    !nano nano 123
+    ?.*#
+    !plan component sla-com-type sla force-back-track
+    ?result true
+    !no nano nano 123
+    ?.*#
+    !commit and-quit
+    ?.*#
+    !show nano
+    ???% No entries found.
+    ?.*#

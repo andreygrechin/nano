@@ -1,0 +1,15 @@
+bandit
+black
+darglint
+debugpy
+ipython
+isort
+mypy
+ncs_pycli
+pycodestyle
+pydantic
+pydocstyle
+pylint
+pytest
+rope
+safety

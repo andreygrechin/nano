@@ -1,0 +1,16 @@
+<config-template xmlns="http://tail-f.com/ns/config/1.0"
+    xmlns:nano="http://example.com/ns/yang/nano"
+    servicepoint="nano-svcpoint"
+    componenttype="nano:cfg-com-type"
+    state="nano:banner-cfg">
+    <devices xmlns="http://tail-f.com/ns/ncs">
+        <device>
+            <name>{/device}</name>
+            <config>
+                <banner xmlns="urn:ios">
+                    <motd>The message of the day</motd>
+                </banner>
+            </config>
+        </device>
+    </devices>
+</config-template>

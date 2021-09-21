@@ -1,0 +1,73 @@
+<config xmlns="http://tail-f.com/ns/config/1.0">
+
+    <!-- enable nacm -->
+    <nacm xmlns="urn:ietf:params:xml:ns:yang:ietf-netconf-acm">
+        <enable-nacm>true</enable-nacm>
+        <enforce-nacm-on-services xmlns="http://tail-f.com/yang/ncs-acm">false</enforce-nacm-on-services>
+    </nacm>
+
+    <!-- add groups -->
+    <nacm xmlns="urn:ietf:params:xml:ns:yang:ietf-netconf-acm">
+        <groups>
+            <group>
+                <name>approvers</name>
+                <user-name>approver</user-name>
+            </group>
+            <group>
+                <name>engineers</name>
+                <user-name>engineer</user-name>
+            </group>
+        </groups>
+    </nacm>
+
+    <!-- rules for approvers -->
+    <nacm xmlns="urn:ietf:params:xml:ns:yang:ietf-netconf-acm">
+        <rule-list>
+            <name>nano-app-rl</name>
+            <group>approvers</group>
+            <rule>
+                <name>allow_approved_leaf</name>
+                <module-name>example-nano</module-name>
+                <path>/nano/nano/approved</path>
+                <access-operations>create read update</access-operations>
+                <action>permit</action>
+            </rule>
+            <rule>
+                <name>disallow_all1</name>
+                <module-name>example-nano</module-name>
+                <path>/nano/nano/device</path>
+                <access-operations>create update delete exec</access-operations>
+                <action>deny</action>
+            </rule>
+            <rule>
+                <name>disallow_all2</name>
+                <module-name>example-nano</module-name>
+                <path>/nano/nano/name-server</path>
+                <access-operations>create update delete exec</access-operations>
+                <action>deny</action>
+            </rule>
+        </rule-list>
+    </nacm>
+
+    <!-- rules for engineers -->
+    <nacm xmlns="urn:ietf:params:xml:ns:yang:ietf-netconf-acm">
+        <rule-list>
+            <name>nano-eng-rl</name>
+            <group>engineers</group>
+            <rule>
+                <name>disallow_approved_leaf</name>
+                <module-name>example-nano</module-name>
+                <path>/nano/nano/approved</path>
+                <access-operations>create delete update exec</access-operations>
+                <!-- only 'read' operation is still allowed -->
+                <action>deny</action>
+            </rule>
+        </rule-list>
+    </nacm>
+</config>
+
+<!-- context is either of the strings cli, webui, or * for
+a command rule. This means that we can differentiate authorization rules for
+which access method is used. Thus if command access is attempted through the CLI
+the context will be the string cli whereas for operations via the Web UI, the
+context will be the string webui. -->

@@ -1,0 +1,8 @@
+{
+    "yangPath": "/Users/username/nso/5.5.2.6/src/ncs/yang:/Users/username/nso/5.5.2.6/packages/neds/cisco-ios-cli-3.8/src/yang",
+    "excludePath": ".pyang:.venv",
+    "diagnostic": {
+        "bad-import-yang-version": "ignore",
+        "duplicate-name": "ignore"
+    }
+}

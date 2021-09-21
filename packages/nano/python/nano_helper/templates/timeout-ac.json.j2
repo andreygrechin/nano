@@ -1,0 +1,253 @@
+{
+    "roomId": "{{_room}}",
+    "text": "This client cannot show the message correcly.",
+    "attachments": [
+        {
+            "contentType": "application/vnd.microsoft.card.adaptive",
+            "content": {
+                "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+                "version": "1.0",
+                "type": "AdaptiveCard",
+                "body": [
+                    {
+                        "type": "ColumnSet",
+                        "columns": [
+                            {
+                                "type": "Column",
+                                "width": "auto",
+                                "items": [
+                                    {
+                                        "type": "TextBlock",
+                                        "text": "_",
+                                        "isVisible": false
+                                    },
+                                    {
+                                        "type": "Image",
+                                        "style": "Default",
+                                        "url": "https://static-files-dsx.pages.dev/images/logo.png",
+                                        "size": "Medium",
+                                        "spacing": "ExtraLarge"
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "Column",
+                                "items": [
+                                    {
+                                        "type": "TextBlock",
+                                        "text": "Company motto",
+                                        "weight": "Lighter",
+                                        "color": "Accent"
+                                    },
+                                    {
+                                        "type": "TextBlock",
+                                        "weight": "Bolder",
+                                        "wrap": true,
+                                        {% if timeout == 'jeopardy' %}
+                                        "text": "SLA control",
+                                        "color": "Attention",
+                                        {% elif timeout == 'violation' %}
+                                        "text": "SLA control",
+                                        "color": "Warning",
+                                        {% elif timeout == 'success' %}
+                                        "text": "The service is provisioned",
+                                        "color": "Light",
+                                        {% endif %}
+                                        "size": "Large",
+                                        "spacing": "Small"
+                                    }
+                                ],
+                                "width": "stretch"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "ColumnSet",
+                        "columns": [
+                            {
+                                "type": "Column",
+                                "width": 35,
+                                "items": [
+                                    {
+                                        "type": "TextBlock",
+                                        "text": "Service name:",
+                                        "color": "Dark",
+                                        "weight": "Default",
+                                        "spacing": "Small"
+                                    },
+                                    {
+                                        "type": "TextBlock",
+                                        "text": "Service ID:",
+                                        "color": "Dark",
+                                        "weight": "Default",
+                                        "spacing": "Small"
+                                    },
+                                    {
+                                        "type": "TextBlock",
+                                        "text": "Department:",
+                                        "color": "Dark",
+                                        "weight": "Default",
+                                        "spacing": "Small"
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "Column",
+                                "width": 65,
+                                "items": [
+                                    {
+                                        "type": "TextBlock",
+                                        "text": "Nano service v0.1",
+                                        "color": "Dark",
+                                        "weight": "Lighter",
+                                        "spacing": "Small"
+                                    },
+                                    {
+                                        "type": "TextBlock",
+                                        "text": "/nano:nano/nano{{ '{' }}{{ id}}{{ '}' }}",
+                                        "color": "Dark",
+                                        "weight": "Lighter",
+                                        "spacing": "Small"
+                                    },
+                                    {
+                                        "type": "TextBlock",
+                                        "text": "Marketing",
+                                        "color": "Dark",
+                                        "weight": "Lighter",
+                                        "spacing": "Small"
+                                    }
+                                ]
+                            }
+                        ],
+                        "spacing": "Padding",
+                        "horizontalAlignment": "Center"
+                    },
+                    {
+                        "type": "TextBlock",
+                        {% if timeout == 'jeopardy' %}
+                        "text": "Please note, SLA of the approval will expire soon 🤔",
+                        "color": "Attention",
+                        {% elif timeout == 'violation' %}
+                        "text": "SLA of the approval is violated 😩",
+                        "color": "Warning",
+                        {% elif timeout == 'success' %}
+                        "text": "The service is successfully provisioned 🤝",
+                        "color": "Good",
+                        {% endif %}
+                        "weight": "Bolder",
+                        "wrap": true
+                    },
+                    {
+                        "type": "TextBlock",
+                        "text": "Service policy description:"
+                    },
+                    {
+                        "type": "ColumnSet",
+                        "columns": [
+                            {
+                                "type": "Column",
+                                "width": "auto",
+                                "spacing": "Small",
+                                "items": [
+                                    {
+                                        "type": "TextBlock",
+                                        "text": "🔗"
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "Column",
+                                "width": "auto",
+                                "spacing": "Small",
+                                "items": [
+                                    {
+                                        "type": "TextBlock",
+                                        "text": "[Some references](https://developer.cisco.com/docs/nso/)"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "ColumnSet",
+                        "columns": [
+                            {
+                                "type": "Column",
+                                "width": "65",
+                                "spacing": "Small",
+                                "items": [
+                                    {
+                                        "type": "TextBlock",
+                                        "text": "Best to approve before",
+                                        "color": "Dark",
+                                        "weight": "Default",
+                                        "wrap": true,
+                                        "spacing": "Small"
+                                    },
+                                    {
+                                        "type": "TextBlock",
+                                        "text": "Approve by",
+                                        "color": "Dark",
+                                        "weight": "Default",
+                                        "wrap": true,
+                                        "spacing": "Small"
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "Column",
+                                "width": "35",
+                                "spacing": "Small",
+                                "items": [
+                                    {
+                                        "type": "TextBlock",
+                                        "text": "{{ jeopardy_time }}",
+                                        "color": "Dark",
+                                        "weight": "Lighter",
+                                        "wrap": true,
+                                        "spacing": "Small",
+                                        "horizontalAlignment": "Right"
+                                    },
+                                    {
+                                        "type": "TextBlock",
+                                        "text": "{{ violation_time }}",
+                                        "color": "Dark",
+                                        "weight": "Lighter",
+                                        "wrap": true,
+                                        "spacing": "Small",
+                                        "horizontalAlignment": "Right"
+                                    }
+                                ]
+                            }
+                        ],
+                        "horizontalAlignment": "Center",
+                        {% if timeout == 'jeopardy' %}
+                        "style": "Attention",
+                        {% elif timeout == 'violation' %}
+                        "style": "Warning",
+                        {% elif timeout == 'success' %}
+                        "style": "Accent",
+                        {% endif %}
+                        "bleed": true
+                    }
+                ],
+                "actions": [
+                    {
+                        "type": "Action.OpenUrl",
+                        "title": "Open the service in NSO",
+                        "id": "",
+                        "url": "http://0.0.0.0:8080/webui-one/ConfigurationEditor/nano:nano/nano%7B{{ id }}%7D",
+                        "style": "Positive"
+                    },
+                    {
+                        "type": "Action.OpenUrl",
+                        "title": "developer.cisco.com",
+                        "id": "",
+                        "url": "https://developer.cisco.com/",
+                        "style": "Positive"
+                    }
+                ]
+            }
+        }
+    ]
+}

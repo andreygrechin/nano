@@ -1,0 +1,24 @@
+<config xmlns="http://tail-f.com/ns/config/1.0">
+    <aaa xmlns="http://tail-f.com/ns/aaa/1.1">
+        <authentication>
+            <users>
+                <user>
+                    <name>approver</name>
+                    <uid>65001</uid>
+                    <gid>65002</gid>
+                    <password>$6$VTmaYVDQPwSNohng$J8HG5eQwAM54W1jCyYNXHA8YGcSD2h542OFtOCustTTXDVWbBIQIjGBshZUiAFU5fHDwomGf5aTsWqnUyqa6W/</password>
+                    <ssh_keydir></ssh_keydir>
+                    <homedir></homedir>
+                </user>
+                <user>
+                    <name>engineer</name>
+                    <uid>65003</uid>
+                    <gid>65004</gid>
+                    <password>$6$6DDd3RwKwD5dDMih$g3FSVipLVXjg1bIqUK7.exoFxOTXtDyuYT4FWSi010rTePGk7HGvBKfDjh2znbF9ZJiz1vo.i84RjD6K1kwwY.</password>
+                    <ssh_keydir></ssh_keydir>
+                    <homedir></homedir>
+                </user>
+            </users>
+        </authentication>
+    </aaa>
+</config>

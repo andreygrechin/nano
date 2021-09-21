@@ -1,0 +1,75 @@
+{
+    "roomId": "{{_room}}",
+    "text": "This client cannot show the message correcly.",
+    "attachments": [
+        {
+            "contentType": "application/vnd.microsoft.card.adaptive",
+            "content": {
+                "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+                "version": "1.0",
+                "type": "AdaptiveCard",
+                "body": [
+                    {
+                        "type": "ColumnSet",
+                        "columns": [
+                            {
+                                "type": "Column",
+                                "width": "auto",
+                                "items": [
+                                    {
+                                        "type": "TextBlock",
+                                        "text": "_",
+                                        "isVisible": false
+                                    },
+                                    {
+                                        "type": "Image",
+                                        "style": "Default",
+                                        "url": "https://static-files-dsx.pages.dev/images/logo.png",
+                                        "size": "Medium",
+                                        "spacing": "ExtraLarge"
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "Column",
+                                "items": [
+                                    {
+                                        "type": "TextBlock",
+                                        "text": "Company motto",
+                                        "weight": "Lighter",
+                                        "color": "Accent"
+                                    },
+                                    {
+                                        "type": "TextBlock",
+                                        "weight": "Bolder",
+                                        "text": "Test message",
+                                        "wrap": true,
+                                        "color": "Light",
+                                        "size": "Large",
+                                        "spacing": "Small"
+                                    }
+                                ],
+                                "width": "stretch"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "TextBlock",
+                        "text": "This is a test message; please ignore it.",
+                        "color": "Default",
+                        "weight": "Default",
+                        "wrap": true
+                    }{% if text %},
+                    {
+                        "type": "TextBlock",
+                        "text": "Test string: {{ text }}",
+                        "color": "Default",
+                        "weight": "Default",
+                        "wrap": true
+                    }
+                    {% endif %}
+                ]
+            }
+        }
+    ]
+}

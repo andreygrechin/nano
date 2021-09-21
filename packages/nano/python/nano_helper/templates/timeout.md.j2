@@ -1,0 +1,16 @@
+# SLA control
+
+{% if timeout == "jeopardy" %}
+Please note, SLA of the approval will expire soon 🤔
+{% elif timeout == "violation" %}
+SLA of the approval is violated 😩
+{% elif timeout == "success" %}
+The service is successfully provisioned 🤝
+{% else %}
+Template error 😳
+{% endif %}
+{% if jeopardy_time and violation_time %}
+
+> Best to approve before: **{{ jeopardy_time }}**
+> Approve by: **{{ violation_time }}**
+{% endif %}

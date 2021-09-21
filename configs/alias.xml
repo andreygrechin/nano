@@ -1,0 +1,14 @@
+<config xmlns="http://tail-f.com/ns/config/1.0">
+    <alias xmlns="http://tail-f.com/ns/aaa/1.1">
+        <name>c</name>
+        <expansion>config</expansion>
+    </alias>
+    <alias xmlns="http://tail-f.com/ns/aaa/1.1">
+        <name>o</name>
+        <expansion>show packages package oper-status</expansion>
+    </alias>
+    <alias xmlns="http://tail-f.com/ns/aaa/1.1">
+        <name>r</name>
+        <expansion>packages reload</expansion>
+    </alias>
+</config>

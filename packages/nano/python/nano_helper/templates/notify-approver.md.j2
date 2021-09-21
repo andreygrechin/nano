@@ -1,0 +1,10 @@
+# A new service instance requires your approval.
+
+A new service instance `/nano:nano/nano{{ '{' }}{{ id}}{{ '}' }}` is require your approval.
+
+[Open the service in NSO](http://0.0.0.0:8080/webui-one/ServiceManager/nano:nano/nano{{ id }}}).
+{% if jeopardy_time and violation_time %}
+
+> Best to approve before: **{{ jeopardy_time }}**
+> Approve by: **{{ violation_time }}**
+{% endif %}

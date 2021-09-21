@@ -1,0 +1,231 @@
+{
+    "roomId": "{{_room}}",
+    "text": "This client cannot show the message correcly.",
+    "attachments": [
+        {
+            "contentType": "application/vnd.microsoft.card.adaptive",
+            "content": {
+                "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+                "version": "1.0",
+                "type": "AdaptiveCard",
+                "body": [
+                    {
+                        "type": "ColumnSet",
+                        "columns": [
+                            {
+                                "type": "Column",
+                                "width": "Auto",
+                                "items": [
+                                    {
+                                        "type": "TextBlock",
+                                        "text": "_",
+                                        "isVisible": false
+                                    },
+                                    {
+                                        "type": "Image",
+                                        "style": "Default",
+                                        "url": "https://static-files-dsx.pages.dev/images/logo.png",
+                                        "size": "Medium",
+                                        "spacing": "ExtraLarge"
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "Column",
+                                "items": [
+                                    {
+                                        "type": "TextBlock",
+                                        "text": "Company motto",
+                                        "weight": "Lighter",
+                                        "color": "Accent"
+                                    },
+                                    {
+                                        "type": "TextBlock",
+                                        "weight": "Bolder",
+                                        "text": "A new service instance requires your approval.",
+                                        "wrap": true,
+                                        "color": "Light",
+                                        "size": "Large",
+                                        "spacing": "Small"
+                                    }
+                                ],
+                                "width": "stretch"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "ColumnSet",
+                        "columns": [
+                            {
+                                "type": "Column",
+                                "width": 35,
+                                "items": [
+                                    {
+                                        "type": "TextBlock",
+                                        "text": "Service name:",
+                                        "color": "Dark",
+                                        "weight": "Default",
+                                        "spacing": "Small"
+                                    },
+                                    {
+                                        "type": "TextBlock",
+                                        "text": "Service ID:",
+                                        "color": "Dark",
+                                        "weight": "Default",
+                                        "spacing": "Small"
+                                    },
+                                    {
+                                        "type": "TextBlock",
+                                        "text": "Department:",
+                                        "color": "Dark",
+                                        "weight": "Default",
+                                        "spacing": "Small"
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "Column",
+                                "width": 65,
+                                "items": [
+                                    {
+                                        "type": "TextBlock",
+                                        "text": "Nano service v0.1",
+                                        "color": "Dark",
+                                        "weight": "Lighter",
+                                        "spacing": "Small"
+                                    },
+                                    {
+                                        "type": "TextBlock",
+                                        "text": "/nano:nano/nano{{ '{' }}{{ id}}{{ '}' }}",
+                                        "color": "Dark",
+                                        "weight": "Lighter",
+                                        "spacing": "Small"
+                                    },
+                                    {
+                                        "type": "TextBlock",
+                                        "text": "Marketing",
+                                        "color": "Dark",
+                                        "weight": "Lighter",
+                                        "spacing": "Small"
+                                    }
+                                ]
+                            }
+                        ],
+                        "spacing": "Padding",
+                        "horizontalAlignment": "Center"
+                    },
+                    {
+                        "type": "TextBlock",
+                        "text": "**Lorem ipsum dolor sit amet**, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.\n\n_Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum._",
+                        "color": "Light",
+                        "weight": "Lighter",
+                        "wrap": true
+                    },
+                    {
+                        "type": "TextBlock",
+                        "text": "Service policy description:"
+                    },
+                    {
+                        "type": "ColumnSet",
+                        "columns": [
+                            {
+                                "type": "Column",
+                                "width": "Auto",
+                                "spacing": "Small",
+                                "items": [
+                                    {
+                                        "type": "TextBlock",
+                                        "text": "🔗"
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "Column",
+                                "width": "Auto",
+                                "spacing": "Small",
+                                "items": [
+                                    {
+                                        "type": "TextBlock",
+                                        "text": "[Some references](https://developer.cisco.com/docs/nso/)"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "ColumnSet",
+                        "columns": [
+                            {
+                                "type": "Column",
+                                "width": "65",
+                                "spacing": "Small",
+                                "items": [
+                                    {
+                                        "type": "TextBlock",
+                                        "text": "Best to approve before",
+                                        "color": "Dark",
+                                        "weight": "Default",
+                                        "wrap": true,
+                                        "spacing": "Small"
+                                    },
+                                    {
+                                        "type": "TextBlock",
+                                        "text": "Approve by",
+                                        "color": "Dark",
+                                        "weight": "Default",
+                                        "wrap": true,
+                                        "spacing": "Small"
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "Column",
+                                "width": "35",
+                                "spacing": "Small",
+                                "items": [
+                                    {
+                                        "type": "TextBlock",
+                                        "text": "{{ jeopardy_time }}",
+                                        "color": "Dark",
+                                        "weight": "Lighter",
+                                        "wrap": true,
+                                        "spacing": "Small",
+                                        "horizontalAlignment": "Right"
+                                    },
+                                    {
+                                        "type": "TextBlock",
+                                        "text": "{{ violation_time }}",
+                                        "color": "Dark",
+                                        "weight": "Lighter",
+                                        "wrap": true,
+                                        "spacing": "Small",
+                                        "horizontalAlignment": "Right"
+                                    }
+                                ]
+                            }
+                        ],
+                        "horizontalAlignment": "Center",
+                        "style": "Accent",
+                        "bleed": true
+                    }
+                ],
+                "actions": [
+                    {
+                        "type": "Action.OpenUrl",
+                        "title": "Open the service in NSO",
+                        "id": "",
+                        "url": "http://0.0.0.0:8080/webui-one/ConfigurationEditor/nano:nano/nano%7B{{ id }}%7D",
+                        "style": "Positive"
+                    },
+                    {
+                        "type": "Action.OpenUrl",
+                        "title": "developer.cisco.com",
+                        "id": "",
+                        "url": "https://developer.cisco.com/",
+                        "style": "Positive"
+                    }
+                ]
+            }
+        }
+    ]
+}

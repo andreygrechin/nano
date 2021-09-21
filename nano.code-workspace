@@ -1,0 +1,105 @@
+{
+    "folders": [
+        {
+            "path": "."
+        }
+    ],
+    "settings": {
+        "cSpell.words": [
+            "actionpoint",
+            "adaptivecards",
+            "asciicast",
+            "astimezone",
+            "authgroups",
+            "Bjorklund",
+            "ciphertext",
+            "cmdrule",
+            "componenttype",
+            "confd",
+            "curr",
+            "DCNM",
+            "FASTMAP",
+            "groupdict",
+            "inet",
+            "iosxe",
+            "IPAM",
+            "iselement",
+            "Keypath",
+            "kpath",
+            "leafref",
+            "maagic",
+            "maapi",
+            "motd",
+            "nacm",
+            "nanospm",
+            "ncsc",
+            "ncsrc",
+            "neds",
+            "netconf",
+            "nocreate",
+            "notif",
+            "nsotest",
+            "pyapi",
+            "pyproject",
+            "pytest",
+            "PYTHONPATH",
+            "pyval",
+            "RBAC",
+            "RESTCONF",
+            "scrapli",
+            "servicepoint",
+            "svcpoint",
+            "tailf",
+            "tctx",
+            "tmpl",
+            "toolset",
+            "uinfo",
+            "USECASE",
+            "venv",
+            "Webex",
+            "webexteamssdk",
+            "webui"
+        ],
+        "python.pythonPath": ".venv/bin/python"
+    },
+    "launch": {
+        "version": "0.2.0",
+        "envFile": "${workspaceFolder}/env/dev.env",
+        "configurations": [
+            {
+                "name": "Python: Current File",
+                "type": "python",
+                "request": "launch",
+                "program": "${file}",
+                "console": "integratedTerminal"
+            },
+            {
+                "name": "Python: NID Remote Attach",
+                "type": "python",
+                "request": "attach",
+                "port": 5678,
+                "host": "localhost",
+                "pathMappings": [
+                    {
+                        "localRoot": "${workspaceFolder:nano}/packages",
+                        "remoteRoot": "${workspaceFolder:nano}/state/packages-in-use.cur/1"
+                    }
+                ]
+            }
+        ]
+    },
+    "extensions": {
+        "recommendations": [
+            "samuelcolvin.jinjahtml",
+            "editorconfig.editorconfig",
+            "streetsidesoftware.code-spell-checker",
+            "andreygrechin.lux-colorizer",
+            "davidanson.vscode-markdownlint",
+            "ms-python.python",
+            "marvhen.reflow-markdown",
+            "dotjoshjohnson.xml",
+            "redhat.vscode-yaml",
+            "typefox.yang-vscode"
+        ]
+    }
+}

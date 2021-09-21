@@ -1,0 +1,15 @@
+<config-template xmlns="http://tail-f.com/ns/config/1.0"
+    xmlns:nano="http://example.com/ns/yang/nano"
+    servicepoint="nano-svcpoint"
+    componenttype="nano:sla-com-type"
+    state="nano:trigger-created">
+    <service-progress-monitoring xmlns="http://tail-f.com/ns/ncs"
+        tags="nocreate">
+        <trigger tags="merge">
+            <name>nano-spm-{/id}</name>
+            <policy>nano-sla-policy</policy>
+            <component>self</component>
+            <target xmlns:nano="http://example.com/ns/yang/nano">/nano:nano/nano:nano[nano:id='{/id}']</target>
+        </trigger>
+    </service-progress-monitoring>
+</config-template>

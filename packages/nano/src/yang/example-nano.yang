@@ -1,0 +1,460 @@
+module example-nano {
+    yang-version "1.1";
+    namespace "http://example.com/ns/yang/nano";
+    prefix nano;
+    import tailf-common {
+        prefix tailf;
+    }
+    import tailf-ncs {
+        prefix ncs;
+    }
+    import tailf-kicker {
+        prefix kicker;
+    }
+    organization
+      "Cisco Systems, Inc.";
+    contact
+      "E-mail: nso-ru@cisco.com";
+    description
+      "Example of Nano service.
+
+       NOTE: This service is intended for the testing environment only.";
+    revision 2021-07-15 {
+        description
+          "Initial revision.";
+        reference
+          "RFC 7950: The YANG 1.1 Data Modeling Language";
+    }
+    // component types
+    identity sla-com-type {
+        base ncs:plan-component-type;
+        description
+          "SLA component type";
+    }
+    identity cfg-com-type {
+        base ncs:plan-component-type;
+        description
+          "Nano component type";
+    }
+    // plan stages
+    identity trigger-created {
+        base ncs:plan-state;
+        description
+          "Nano plan stage2 (Create a SPM trigger)";
+    }
+    identity approver-notif {
+        base ncs:plan-state;
+        description
+          "Nano plan stage (notification of an approver)";
+    }
+    identity approved {
+        base ncs:plan-state;
+        description
+          "Nano plan stage (manual approval)";
+    }
+    identity pre-test {
+        base ncs:plan-state;
+        description
+          "Nano plan stage (pre-test before deployment)";
+    }
+    identity banner-cfg {
+        base ncs:plan-state;
+        description
+          "Nano plan stage (banner configuration done)";
+    }
+    identity name-server-cfg {
+        base ncs:plan-state;
+        description
+          "Nano plan stage (name-server configuration done)";
+    }
+    identity post-test {
+        base ncs:plan-state;
+        description
+          "Nano plan stage (post-test after deployment)";
+    }
+    // groupings
+    grouping action-output {
+        description
+          "A reusable output group for an action";
+        leaf result {
+            type boolean;
+            description
+              "Result of the action";
+        }
+        leaf msg {
+            type string;
+            description
+              "Additional info";
+        }
+    }
+    // /nano - Main container
+    container nano {
+        description
+          "Example of Nano service";
+        // /nano/nano - Service instance
+        list nano {
+            ncs:servicepoint nano-svcpoint;
+            tailf:cli-suppress-list-no;
+            key id;
+            description
+              "Nano service instance";
+            // /nano/nano/notify
+            container notify {
+                description
+                  "Service notifications";
+                // /nano/nano/notify/notify-approver
+                action notify-approver {
+                    tailf:actionpoint send-msg-action;
+                    output {
+                        uses action-output;
+                    }
+                    description
+                      "Manually send a notification to an approver";
+                }
+            }
+            // /nano/nano/tests
+            container tests {
+                description
+                  "Run tests";
+                // /nano/nano/tests/pre-test
+                action pre-test {
+                    tailf:actionpoint pre-test-action;
+                    description
+                      "Manually run pre-test. Will not update post-action status, use
+                       'reactive-re-deploy' command instead.";
+                    // 'reactive-re-deploy' will not re-run post-actions if they
+                    // already in 'create-reached' or 'delete-reached' status
+                    output {
+                        uses action-output;
+                    }
+                }
+                // /nano/nano/tests/post-test
+                action post-test {
+                    tailf:actionpoint post-test-action;
+                    description
+                      "Manually run pre-test. Will not update post-action status, use
+                       'reactive-re-deploy' command instead.";
+                    // 'reactive-re-deploy' will not re-run post-actions if they
+                    // already in 'create-reached' or 'delete-reached' status
+                    output {
+                        uses action-output;
+                    }
+                }
+            }
+            // /nano/nano/id
+            leaf id {
+                type string {
+                    pattern
+                      "[a-zA-Z0-9]+[a-zA-Z0-9_-]*" {
+                        error-message
+                          "Must be alphanumeric string, not starting with dash or underscore.";
+                        error-app-tag
+                          "invalid-data";
+                        reference
+                          "https://www.w3.org/TR/2004/REC-xmlschema-2-20041028/#regexs";
+                    }
+                }
+                description
+                  "Service instance ID";
+            }
+            // /nano/nano/device
+            leaf device {
+                type leafref {
+                    path "/ncs:devices/ncs:device/ncs:name";
+                }
+                mandatory true;
+                description
+                  "Attached device";
+            }
+            // /nano/nano/name-server
+            leaf name-server {
+                type string;
+                default "208.67.220.220";
+                description
+                  "Name server";
+            }
+            // /nano/nano/approved
+            leaf approved {
+                tailf:cli-boolean-no;
+                tailf:cli-show-no;
+                tailf:cli-show-with-default;
+                type boolean;
+                default false;
+                description
+                  "Approved flag";
+            }
+            uses ncs:service-data;
+            uses ncs:nano-plan-data;
+            uses ncs:service-progress-monitoring-data;
+        }
+    }
+    // /nano/sla - sla capabilities
+    augment "/nano:nano" {
+        description
+          "Add SLA capabilities.";
+        container sla {
+            description
+              "Configure SLA-settings for the service";
+            // /nano/sla/timeouts
+            container timeouts {
+                description
+                  "SLA timeouts for notifications";
+                // /nano/sla/timeouts/timeout
+                uses ncs:service-progress-monitoring-trigger-action {
+                    refine timeout {
+                        tailf:actionpoint send-msg-action;
+                        description
+                          "Manually send SLA notifications";
+                    }
+                }
+                leaf jeopardy {
+                    tailf:cli-incomplete-command;
+                    type uint32;
+                    units minutes;
+                    must ". >= 1 and . <=10079" {
+                        error-message
+                          "This value MUST NOT be less than 1 minute and
+                           more then one week -1 minute.";
+                    }
+                    default 30;
+                    description
+                      "Jeopardy timeout, minutes";
+                }
+                leaf violation {
+                    type uint32;
+                    units minutes;
+                    must ". >= 2 and . <= 10080" {
+                        error-message
+                          "This value MUST NOT be less than 2 minutes and
+                             more then one week.";
+                    }
+                    must ". > ../jeopardy" {
+                        error-message
+                          "This value MUST be more than jeopardy timeout.";
+                    }
+                    default 60;
+                    description
+                      "Violation timeout, minutes";
+                }
+            }
+            // /nano/sla/webex
+            container webex {
+                description
+                  "Webex notification settings";
+                // /nano/sla/room-id
+                leaf room-id {
+                    tailf:cli-show-with-default;
+                    type string {
+                        pattern
+                          '[a-zA-Z0-9]{76}|%ENV\{[a-zA-Z_][a-zA-Z0-9_]*\}' {
+                            error-message
+                              "Must be a valid roomId or an environment variable name.";
+                            error-app-tag
+                              "invalid-data";
+                            reference
+                              "https://www.w3.org/TR/2004/REC-xmlschema-2-20041028/#regexs";
+                        }
+                    }
+                    default "%ENV{WEBEX_ROOM_ID}";
+                    description
+                      "Webex roomId (a value or an environment variable name %ENV{VAR_NAME}, %ENV{WEBEX_ROOM_ID} by default)";
+                }
+                // /nano/sla/bot-token
+                leaf bot-token {
+                    tailf:cli-show-with-default;
+                    type string {
+                        pattern
+                          '[a-zA-Z0-9]{76}|%ENV\{[a-zA-Z_][a-zA-Z0-9_]*\}' {
+                            error-message
+                              "Must be a valid roomId or an environment variable name.";
+                            error-app-tag
+                              "invalid-data";
+                            reference
+                              "https://www.w3.org/TR/2004/REC-xmlschema-2-20041028/#regexs";
+                        }
+                    }
+                    default "%ENV{WEBEX_BOT_TOKEN}";
+                    description
+                      "Webex API bearer token for the bot (a value or an environment variable name %ENV{VAR_NAME}, %ENV{WEBEX_BOT_TOKEN} by default)";
+                }
+                // /nano/sla/send-test-msg
+                action send-test-msg {
+                    tailf:actionpoint send-msg-action;
+                    description
+                      "Send a test message";
+                    input {
+                        leaf text {
+                            type string;
+                            default "This is a default test text.";
+                            description
+                              "Text to send";
+                        }
+                    }
+                    output {
+                        uses action-output;
+                    }
+                }
+            }
+            // /nano/sla/init-sla-policy
+            action init-sla-policy {
+                tailf:actionpoint init-spm-action;
+                tailf:confirm-text "SPM policy will be created or updated with SLA timeouts, are you sure?" {
+                    tailf:confirm-default true;
+                }
+                description
+                  "Update service-progress-monitoring policy with sla timeouts";
+                input {
+                    uses kicker:action-input-params;
+                }
+                output {
+                    uses action-output;
+                }
+            }
+        }
+    }
+    // /nano/sla/timeouts/timeout/output
+    augment "/nano:nano/nano:sla/nano:timeouts/nano:timeout/output" {
+        uses action-output;
+    }
+    // nano-plan
+    ncs:plan-outline nano-plan {
+        ncs:component-type "ncs:self" {
+            ncs:state "ncs:init";
+            ncs:state "ncs:ready" {
+                ncs:create {
+                    ncs:pre-condition {
+                        ncs:monitor  "$SERVICE/plan/component[type='nano:cfg-com-type'][name='config']/state[name='ncs:ready']" {
+                            ncs:trigger-expr "status = 'reached'";
+                        }
+                    }
+                }
+            }
+        }
+        ncs:component-type "nano:cfg-com-type" {
+            ncs:state "ncs:init" {
+                ncs:create {
+                    ncs:pre-condition {
+                        ncs:monitor  "$PLAN/component[type='nano:sla-com-type'][name='sla']/state[name='ncs:ready']" {
+                            ncs:trigger-expr "status = 'reached'";
+                        }
+                    }
+                }
+            }
+            ncs:state "nano:approver-notif" {
+                ncs:create {
+                    // post-action to send a notification
+                    ncs:post-action-node "$SERVICE/notify" {
+                        ncs:action-name "notify-approver";
+                        ncs:sync;
+                        ncs:result-expr "result = 'true'";
+                    }
+                }
+            }
+            ncs:state "nano:approved" {
+                ncs:create {
+                    ncs:pre-condition {
+                        ncs:monitor "$SERVICE" {
+                            ncs:trigger-expr "approved = 'true'";
+                        }
+                    }
+                }
+            }
+            ncs:state "nano:pre-test" {
+                ncs:create {
+                    ncs:pre-condition {
+                        ncs:monitor  "$SERVICE/plan/component[type='nano:cfg-com-type'][name='config']/state[name='nano:approved']" {
+                            ncs:trigger-expr "status = 'reached'";
+                        }
+                    }
+                    ncs:post-action-node "$SERVICE/tests" {
+                        ncs:action-name "pre-test";
+                        ncs:sync;
+                        ncs:result-expr "result = 'true'";
+                    }
+                }
+            }
+            ncs:state "nano:banner-cfg" {
+                ncs:create {
+                    ncs:nano-callback;
+                    ncs:force-commit;
+                    ncs:pre-condition {
+                        ncs:monitor  "$PLAN/component[type='nano:cfg-com-type'][name='config']/state[name='nano:pre-test']" {
+                            ncs:trigger-expr "post-action-status = 'create-reached'";
+                        }
+                    }
+                }
+                ncs:delete {
+                    // ncs:nano-callback;
+                    ncs:force-commit;
+                }
+            }
+            ncs:state "nano:name-server-cfg" {
+                ncs:create {
+                    ncs:nano-callback;
+                    ncs:force-commit;
+                    ncs:pre-condition {
+                        ncs:monitor  "$SERVICE/plan/component[type='nano:cfg-com-type'][name='config']/state[name='nano:banner-cfg']" {
+                            ncs:trigger-expr "status = 'reached'";
+                        }
+                    }
+                }
+                ncs:delete {
+                    // ncs:nano-callback;
+                    ncs:force-commit;
+                }
+            }
+            ncs:state "nano:post-test" {
+                ncs:create {
+                    ncs:pre-condition {
+                        ncs:monitor  "$SERVICE/plan/component[type='nano:cfg-com-type'][name='config']/state[name='nano:name-server-cfg']" {
+                            ncs:trigger-expr "status = 'reached'";
+                        }
+                    }
+                    ncs:post-action-node "$SERVICE/tests" {
+                        ncs:action-name "post-test";
+                        ncs:sync;
+                        ncs:result-expr "result = 'true'";
+                    }
+                }
+            }
+            ncs:state "ncs:ready" {
+                ncs:create {
+                    ncs:pre-condition {
+                        ncs:monitor  "$SERVICE/plan/component[type='nano:cfg-com-type'][name='config']/state[name='nano:post-test']" {
+                            ncs:trigger-expr "post-action-status = 'create-reached'";
+                        }
+                    }
+                }
+            }
+        }
+        ncs:component-type "sla-com-type" {
+            ncs:state "ncs:init";
+            ncs:state "nano:trigger-created" {
+                ncs:create {
+                    ncs:nano-callback;
+                    ncs:pre-condition {
+                        ncs:monitor  "$SERVICE/plan/component[type='nano:sla-com-type'][name='sla']/state[name='ncs:init']" {
+                            ncs:trigger-expr "status = 'reached'";
+                        }
+                    }
+                }
+            }
+            ncs:state "ncs:ready";
+        }
+    }
+    // service-behavior-tree
+    ncs:service-behavior-tree nano-svcpoint {
+        ncs:plan-outline-ref "nano:nano-plan";
+        ncs:selector {
+            ncs:create-component "'self'" {
+                ncs:component-type-ref "ncs:self";
+            }
+            ncs:create-component "'sla'" {
+                ncs:component-type-ref "nano:sla-com-type";
+            }
+            ncs:create-component "'config'" {
+                ncs:component-type-ref "nano:cfg-com-type";
+            }
+        }
+    }
+}

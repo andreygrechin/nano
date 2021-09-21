@@ -1,0 +1,15 @@
+<ncs-package xmlns="http://tail-f.com/ns/ncs-packages">
+    <name>example-nano-0.1.0</name>
+    <package-version>0.1.0</package-version>
+    <description>Nano service example</description>
+    <ncs-min-version>5.5</ncs-min-version>
+    <python-package>
+        <vm-name>nano</vm-name>
+    </python-package>
+    <component>
+        <name>nano-py</name>
+        <application>
+            <python-class-name>nano_helper.main.Init</python-class-name>
+        </application>
+    </component>
+</ncs-package>
